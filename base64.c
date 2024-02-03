@@ -42,21 +42,12 @@ int base64Encode(const uint8_t *src, size_t srclen, char *dst, size_t dstlen){
             break;
 
         case 2:
-            tmp = src[0] << 16; 
-            tmp = src[1] << 8; 
+            tmp = src[0] << 16
+                | src[1] << 8; 
             dst[0] = map[(tmp >> 18) & 0x3F];
             dst[1] = map[(tmp >> 12) & 0x3F];
             dst[2] = map[(tmp >>  6) & 0x3F];
             dst[3] = '=';
-            dst += 4;
-            break;
-
-        case 3:
-            tmp = src[0] << 16; 
-            dst[0] = map[(tmp >> 18) & 0x3F];
-            dst[1] = map[(tmp >> 12) & 0x3F];
-            dst[2] = map[(tmp >>  6) & 0x3F];
-            dst[3] = map[(tmp      ) & 0x3F];
             dst += 4;
             break;
 
