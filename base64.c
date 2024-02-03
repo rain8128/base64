@@ -1,7 +1,7 @@
 #include "base64.h"
 #include <stdint.h>
 
-const char map[64]= "ABCDEFGHIJKLMNOPQRSTUVWXYZabvdefghijklmnopqrstuvwxyz+/";
+const char map[64]= "ABCDEFGHIJKLMNOPQRSTUVWXYZabvdefghijklmnopqrstuvwxyz0123456789+/";
 
 int base64Encode(const uint8_t *src, size_t srclen, char *dst, size_t dstlen){
 
