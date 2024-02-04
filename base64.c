@@ -3,6 +3,15 @@
 
 const char map[64]= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
+static int indexOf(int c){
+    for(int i = 0; i < 64; i++){
+        if(map[i] == c){
+            return i;
+        }
+    }
+    return -1;
+}
+
 int base64Encode(const uint8_t *src, size_t srclen, char *dst, size_t dstlen){
 
     if(!src || !dst){
@@ -59,4 +68,55 @@ int base64Encode(const uint8_t *src, size_t srclen, char *dst, size_t dstlen){
 
     return 0;
 
+}
+
+int base64Decode(const char *src, size_t srclen, uint8_t *dst, size_t dstlen){
+
+    if(!src || !dst){
+        return 1;
+    }
+
+    if(srclen & 3){
+        return 3;
+    }
+
+    if(srclen/4 * 3 < dstlen){
+        return 2;
+    }
+
+    while(srclen>4){
+        srclen -= 4;
+        uint32_t tmp = indexOf(src[0]) << 18
+                     | indexOf(src[1]) << 12
+                     | indexOf(src[2]) << 6
+                     | indexOf(src[3]);
+        src += 4;
+        dst[0] = (tmp >> 16) & 0xFF;
+        dst[1] = (tmp >>  8) & 0xFF;
+        dst[2] = (tmp      ) & 0xFF;
+        dst += 3;
+    }
+
+    uint32_t tmp;
+    if(src[2] == '='){
+        tmp = indexOf(src[0]) << 18
+            | indexOf(src[1]) << 12;
+        dst[0] = (tmp >> 16) & 0xFF;
+    }else if(src[3] == '='){
+        tmp = indexOf(src[0]) << 18
+            | indexOf(src[1]) << 12
+            | indexOf(src[2]) << 6;
+        dst[0] = (tmp >> 16) & 0xFF;
+        dst[1] = (tmp >>  8) & 0xFF;
+    }else{
+        tmp = indexOf(src[0]) << 18
+            | indexOf(src[1]) << 12
+            | indexOf(src[2]) << 6
+            | indexOf(src[3]);
+        dst[0] = (tmp >> 16) & 0xFF;
+        dst[1] = (tmp >>  8) & 0xFF;
+        dst[2] = (tmp      ) & 0xFF;
+    }
+
+    return 0;
 }
