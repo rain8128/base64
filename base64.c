@@ -80,7 +80,7 @@ int base64Decode(const char *src, size_t srclen, uint8_t *dst, size_t dstlen){
         return 3;
     }
 
-    if(srclen/4 * 3 < dstlen){
+    if(srclen/4 * 3 >= dstlen){
         return 2;
     }
 
