@@ -9,6 +9,11 @@ static int indexOf(int c){
             return i;
         }
     }
+
+    if(c == '='){
+        return 0;
+    }
+
     return -1;
 }
 
@@ -84,7 +89,7 @@ int base64Decode(const char *src, size_t srclen, uint8_t *dst, size_t dstlen){
         return 2;
     }
 
-    while(srclen>4){
+    while(srclen >= 4){
         srclen -= 4;
         uint32_t tmp = indexOf(src[0]) << 18
                      | indexOf(src[1]) << 12
@@ -108,14 +113,6 @@ int base64Decode(const char *src, size_t srclen, uint8_t *dst, size_t dstlen){
             | indexOf(src[2]) << 6;
         dst[0] = (tmp >> 16) & 0xFF;
         dst[1] = (tmp >>  8) & 0xFF;
-    }else{
-        tmp = indexOf(src[0]) << 18
-            | indexOf(src[1]) << 12
-            | indexOf(src[2]) << 6
-            | indexOf(src[3]);
-        dst[0] = (tmp >> 16) & 0xFF;
-        dst[1] = (tmp >>  8) & 0xFF;
-        dst[2] = (tmp      ) & 0xFF;
     }
 
     return 0;
