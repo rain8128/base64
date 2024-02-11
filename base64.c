@@ -81,7 +81,7 @@ int base64Decode(const char *src, size_t srclen, uint8_t *dst, size_t dstlen){
         return 1;
     }
 
-    if(srclen & 3){
+    if(srclen & 3 == 1){
         return 3;
     }
 
@@ -103,11 +103,11 @@ int base64Decode(const char *src, size_t srclen, uint8_t *dst, size_t dstlen){
     }
 
     uint32_t tmp;
-    if(src[2] == '='){
+    if(srclen == 2){
         tmp = indexOf(src[0]) << 18
             | indexOf(src[1]) << 12;
         dst[0] = (tmp >> 16) & 0xFF;
-    }else if(src[3] == '='){
+    }else if(srclen == 3){
         tmp = indexOf(src[0]) << 18
             | indexOf(src[1]) << 12
             | indexOf(src[2]) << 6;
